@@ -3,86 +3,120 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Apple of Fortune — Prédicteur PRO</title>
+<title>Apple of Fortune — Jeu 1xBet Pro</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;-webkit-font-smoothing:antialiased;}
 :root{--bg:#0a0f1e;--card:#101828;--border:#1c2a44;--blue:#009dff;--green:#00e676;--gold:#ffd54f;--red:#ff3d6e;}
-html,body{width:100%;min-height:100vh;background:var(--bg);color:#fff;overflow-x:hidden;}
+body{background:var(--bg);color:#fff;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;}
 
-.bgfx{position:fixed;inset:0;z-index:-2;background:linear-gradient(180deg,#0a0f1e,#0c1526 50%,#081020);}
+.bgfx{position:fixed;inset:0;z-index:-2;background:linear-gradient(160deg,#0a0f1e,#0c1526,#081020);}
 .bgfx::before{content:'';position:absolute;inset:0;background:
- radial-gradient(ellipse 80% 45% at 50% -5%,rgba(0,157,255,.18),transparent),
- radial-gradient(ellipse 60% 40% at 85% 105%,rgba(255,213,79,.06),transparent);}
-.bgfx::after{content:'';position:absolute;inset:0;opacity:.3;
- background-image:radial-gradient(circle at 1px 1px,rgba(255,255,255,.04) 1px,transparent 0);background-size:22px 22px;}
+ radial-gradient(circle at 50% 15%,rgba(0,157,255,.15),transparent),
+ radial-gradient(circle at 85% 95%,rgba(255,213,79,.07),transparent);}
 
-.wrap{position:relative;z-index:1;max-width:440px;margin:0 auto;padding:16px 16px 44px;}
+.wrap{position:relative;z-index:1;max-width:440px;width:100%;}
 
-.hdr{display:flex;align-items:center;gap:11px;margin-bottom:16px;}
-.hdr .lg{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,#0057b8,#009dff);
- display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 24px rgba(0,157,255,.4);}
+/* ============ HEADER + PROGRESSION ============ */
+.hdr{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.hdr .lg{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,#a32c2c,#ff3d6e);
+ display:flex;align-items:center;justify-content:center;font-size:22px;}
 .hdr .t{flex:1;}
-.hdr h1{font-size:17px;font-weight:900;letter-spacing:-.3px;}
-.hdr h1 span{color:var(--blue);}
-.hdr .s{font-size:10px;color:#4d6078;letter-spacing:2px;margin-top:2px;}
-.hdr .pct{background:linear-gradient(135deg,#00c853,#00e676);color:#00210a;font-size:10px;
- font-weight:900;padding:5px 10px;border-radius:20px;box-shadow:0 0 14px rgba(0,230,118,.4);}
+.hdr h1{font-size:17px;font-weight:900;}
+.hdr h1 span{background:linear-gradient(90deg,#ffd54f,#ff9a00);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.hdr .s{font-size:9px;color:#4d6078;letter-spacing:2px;margin-top:1px;}
+.hdr .bal{text-align:right;}
+.hdr .bal .bl{font-size:9px;color:#5a7096;letter-spacing:1px;}
+.hdr .bal .bv{font-size:16px;font-weight:900;color:var(--gold);}
 
-.pred{background:linear-gradient(150deg,#0d1930,#0a1224);border:1px solid #1d4a7d;border-radius:16px;
- padding:20px 16px;position:relative;overflow:hidden;text-align:center;margin-bottom:12px;}
-.pred::before{content:'';position:absolute;top:0;left:-110%;width:110%;height:100%;
- background:linear-gradient(100deg,transparent,rgba(0,157,255,.13),transparent);animation:sh 3s infinite;}
+/* PROGRESSION BAR (comme vrai 1xBet) */
+.prog-wrap{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:12px;margin-bottom:14px;}
+.prog-hd{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.prog-hd .pl{font-size:10px;color:#7fa8d4;letter-spacing:1.5px;font-weight:800;}
+.prog-hd .pn{font-size:12px;font-weight:900;color:var(--gold);}
+.prog-bar{height:8px;background:#0d1526;border-radius:4px;overflow:hidden;position:relative;}
+.prog-fill{height:100%;background:linear-gradient(90deg,#009dff,#00e676);border-radius:4px;
+ transition:width .5s cubic-bezier(.4,0,.2,1);box-shadow:0 0 12px rgba(0,230,118,.4);}
+.prog-marks{display:flex;justify-content:space-between;margin-top:6px;}
+.prog-mark{font-size:8px;color:#4a5f80;text-align:center;transition:color .3s;}
+.prog-mark.done{color:var(--green);font-weight:700;}
+.prog-mark.current{color:var(--gold);font-weight:900;}
+
+/* COULEURS ÉTAPES */
+.m1.done{color:#00e676;} .m2.done{color:#00d0ff;} .m3.done{color:#ffd54f;}
+.m4.done{color:#ff9a00;} .m5.done{color:#ff5252;} .m6.done{color:#c084fc;}
+
+/* ============ ZONE DE JEU ============ */
+.game-area{background:linear-gradient(150deg,#0d1930,#0a1224);border:1px solid #1d4a7d;border-radius:18px;
+ padding:20px 16px;position:relative;overflow:hidden;text-align:center;margin-bottom:14px;}
+.game-area::before{content:'';position:absolute;top:0;left:-110%;width:110%;height:100%;
+ background:linear-gradient(100deg,transparent,rgba(0,157,255,.12),transparent);animation:sh 3s infinite;}
 @keyframes sh{0%{left:-110%;}60%{left:110%;}100%{left:110%;}}
-.pred .bdg{position:absolute;top:12px;right:12px;background:var(--green);font-size:9px;font-weight:900;
- padding:4px 10px;border-radius:12px;letter-spacing:1px;}
-.pred .ttl{font-size:12px;color:#7fa8d4;letter-spacing:2px;font-weight:700;}
-.pred .num{font-size:44px;font-weight:900;line-height:1.15;margin-top:8px;
- background:gradient gold white green;background:linear-gradient(135deg,var(--gold) 0%,#fff 50%,var(--green) 100%);
+
+.game-area .bdg{position:absolute;top:12px;right:12px;background:var(--green);color:#00210a;
+ font-size:9px;font-weight:900;padding:4px 10px;border-radius:12px;}
+
+/* COTE ACTUELLE (grosse) */
+.odds-display{margin:6px 0 14px;}
+.odds-display .ol{font-size:10px;color:#7fa8d4;letter-spacing:2px;font-weight:700;}
+.odds-display .ov{font-size:38px;font-weight:900;line-height:1.1;margin-top:4px;
+ background:linear-gradient(135deg,#ffd54f 0%,#fff 50%,#00e676 100%);
  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
- filter:drop-shadow(0 0 20px rgba(255,213,79,.35));}
-.pred .lbl{font-size:11px;color:#8ba4c8;margin-top:4px;}
-.pred .row{display:flex;justify-content:center;gap:16px;margin-top:14px;}
-.pred .st{text-align:center;}
-.pred .st .v{font-size:16px,var(--green);}
-.pred .st .v{font-size:16px;font-weight:900;color:var(--green);}
-.pred .st .l{font-size:9px;color:#5a7096;letter-spacing:1px;margin-top:2px;}
+ filter:drop-shadow(0 0 18px rgba(255,213,79,.35));transition:all .3s;}
+.odds-display .ov.jump{animation:jump .4s;}
+@keyframes jump{0%,100%{transform:scale(1);}50%{transform:scale(1.18);}}
 
-.apples{display:flex;justify-content:center;gap:8px;margin:14px 0 6px;}
-.app{width:44px;height:44px;border-radius:12px;background:linear-gradient(160deg,#142038,#0d1526);
- border:1px solid #22345a;display:flex;align-items:center;justify-content:center;font-size:22px;transition:all .3s;}
-.app.win{border-color:var(--green);box-shadow:0 0 16px rgba(0,230,118,.4);transform:scale(1.08);}
-.app.lose{opacity:.45;filter:grayscale(1);}
+/* POMMES */
+.apples{display:flex;justify-content:center;gap:10px;margin:14px 0;}
+.app{width:52px;height:52px;border-radius:13px;background:linear-gradient(160deg,#142038,#0d1526);
+ border:2px solid #22345a;display:flex;align-items:center;justify-content:center;font-size:26px;
+ cursor:pointer;transition:all .25s;position:relative;}
+.app:hover:not(.disabled){transform:scale(1.1);border-color:var(--blue);}
+.app .lock{position:absolute;bottom:-5px;right:-5px;font-size:12px;}
+.app.hit{border-color:var(--green);box-shadow:0 0 22px rgba(0,230,118,.5);}
+.app.boom{border-color:var(--red);box-shadow:0 0 22px rgba(255,61,110,.5);}
+.app.disabled{cursor:not-allowed;opacity:.5;}
+.app .idx{position:absolute;bottom:-18px;left:50%;transform:translateX(-50%);
+ font-size:9px;color:#4a5f80;font-weight:700;}
 
-.albl{text-align:center;font-size:10px;color:#5a7096;letter-spacing:1px;margin-bottom:12px;}
+.albl{font-size:10px;color:#5a7096;letter-spacing:.5px;margin-top:18px;}
 
-.hist{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;}
+/* GAIN POTENTIEL */
+.gain{display:flex;justify-content:center;gap:14px;margin-top:12px;padding-top:12px;border-top:1px dashed #1d3050;}
+.gain .g{text-align:center;}
+.gain .v{font-size:16px;font-weight:900;color:var(--green);}
+.gain .l{font-size:9px;color:#5a7096;letter-spacing:1px;margin-top:2px;}
+
+/* MESSAGE */
+.msg{min-height:40px;display:flex;align-items:center;justify-content:center;
+ font-size:14px;font-weight:600;text-align:center;margin-bottom:14px;padding:10px 14px;
+ background:var(--card);border:1px solid var(--border);border-radius:12px;transition:all .3s;}
+.msg.w{border-color:rgba(0,230,118,.3);color:var(--green);}
+.msg.l{border-color:rgba(255,61,110,.3);color:var(--red);}
+
+/* ACTIONS */
+.actions{display:flex;gap:10px;}
+.btn{flex:1;padding:14px;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:800;
+ letter-spacing:.3px;transition:all .15s;}
+.btn.blue{background:linear-gradient(135deg,#0057b8,#009dff);color:#fff;box-shadow:0 4px 20px rgba(0,120,255,.3);}
+.btn.red{background:linear-gradient(135deg,#d32c3c,#ff5252);color:#fff;box-shadow:0 4px 18px rgba(255,61,110,.3);}
+.btn:hover:not(:disabled){transform:translateY(-2px);}
+.btn:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+
+/* ============ HISTORIQUE + STATS ============ */
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:16px;}
+.stat-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px;text-align:center;}
+.stat-card .v{font-size:18px;font-weight:900;color:var(--gold);}
+.stat-card .l{font-size:9px;color:#5a7096;letter-spacing:1px;margin-top:3px;text-transform:uppercase;}
+
+.hist{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:10px;}
 .hist h3{font-size:11px;color:#7fa8d4;letter-spacing:1.5px;font-weight:800;margin-bottom:10px;text-transform:uppercase;}
-.hist .r{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid #131f36;font-size:12px;}
+.hist .r{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #131f36;font-size:12px;}
 .hist .r:last-child{border:none;}
-.hist .r .who{flex:1;color:#c4d4ec;font-weight:600;}
-.hist .r .amt{font-weight:800;color:var(--green);}
-.hist .r .rl{width:52px;text-align:center;font-size:9px;font-weight:800;padding:3px 0;border-radius:8px;}
-.hist .r .rl.w{background:rgba(0,230,118,.12);color:var(--green);}
-.hist .r .rl.l{background:rgba(255,61,110,.12);color:var(--red);}
-
-.tmr{background:rgba(0,157,255,.06);border:1px solid rgba(0,157,255,.2);border-radius:12px;
- padding:12px;text-align:center;margin-bottom:14px;}
-.tmr .tl{font-size:10px;color:#7fc4ff;letter-spacing:1.5px;font-weight:700;margin-bottom:6px;}
-.tmr .dg{display:flex;justify-content:center;gap:7px;}
-.tmr .d{background:#0a1224;border:1px solid #1c2a44;border-radius:7px;padding:6px 12px;min-width:52px;}
-.tmr .n{font-size:18px;font-weight:900;color:var(--blue);font-variant-numeric:tabular-nums;}
-.tmr .l{font-size:7.5px;color:#4d6078;letter-spacing:1.5px;margin-top:2px;}
-
-.cta{width:100%;padding:15px;border:none;border-radius:12px;margin-bottom:14px;
- background:linear-gradient(135deg,#009dff,#00e676);color:#04121f;font-size:15px;font-weight:900;
- letter-spacing:.5px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
- box-shadow:0 4px 26px rgba(0,180,255,.35);transition:all .15s;}
-.cta:hover{transform:translateY(-2px);box-shadow:0 8px 32px rgba(0,200,255,.45);}
-.cta:active{transform:translateY(0);}
-
-.note{background:rgba(0,230,118,.05);border:1px solid rgba(0,230,118,.18);border-radius:10px;
- padding:10px 14px;font-size:10.5px;color:#8ba4c8;text-align:center;line-height:1.5;}
-.note b{color:var(--green);}
+.hist .r .a{font-size:15px;width:22px;text-align:center;}
+.hist .r .who{flex:1;color:#c4d4ec;font-weight:600;font-size:11px;}
+.hist .r .res{font-size:10px;font-weight:800;padding:3px 10px;border-radius:8px;}
+.hist .r .res.w{background:rgba(0,230,118,.12);color:var(--green);}
+.hist .r .res.l{background:rgba(255,61,110,.12);color:var(--red);}
 </style>
 </head>
 <body>
@@ -95,26 +129,357 @@ html,body{width:100%;min-height:100vh;background:var(--bg);color:#fff;overflow-x
 <div class="lg">🍎</div>
 <div class="t">
 <h1>Apple of <span>Fortune</span></h1>
-<div class="s">PREDICTOR DEMO • SANS INSCRIPTION</div>
+<div class="s">PRO EDITION • PROGRESSION</div>
 </div>
-<span class="pct" id="pct">94.7%</span>
+<div class="bal">
+<div class="bl">SOLDE</div>
+<div class="bv" id="bal">10 000</div>
+</div>
 </div>
 
-<div class="pred">
+<!-- PROGRESSION BAR -->
+<div class="prog-wrap">
+<div class="prog-hd">
+<span class="pl">📈 PROGRESSION</span>
+<span class="pn">NIVEAU <span id="lvl">1</span>/6</span>
+</div>
+<div class="prog-bar"><div class="prog-fill" id="pfill" style="width:0%;"></div></div>
+<div class="prog-marks">
+<span class="prog-mark m1 current">x1.20</span>
+<span class="prog-mark m2">x1.45</span>
+<span class="prog-mark m3">x1.92</span>
+<span class="prog-mark m4">x2.50</span>
+<span class="prog-mark m5">x3.80</span>
+<span class="prog-mark m6">x5.55</span>
+</div>
+</div>
+
+<!-- ZONE DE JEU -->
+<div class="game-area">
 <span class="bdg">LIVE</span>
-<div class="ttl">PRÉDICTION DU MOMENT</div>
-<div class="num" id="pnum">🍎 POMME 3</div>
-<div class="lbl">La pomme gagnante estimée de la prochaine manche</div>
-<div class="row">
-<div class="st"><div class="v" id="ppl">12 847</div><div class="l">UTILISATEURS</div></div>
-<div class="st"><div class="v">x1.92</div><div class="l">GAIN MOYEN</div></div>
-<div class="st"><div class="v" id="streak">5</div><div class="l">SÉRIE GAGNANTE</</div></div>
+
+<div class="odds-display">
+<div class="ol">COTE ACTUELLE</div>
+<div class="ov" id="odds">x1.20</div>
 </div>
 
 <div class="apples" id="apples">
-<div class="app">🍎</div>
-<div class="app">🍎</div>
-<div class="app">🍎</div>
-<div class="app">🍎</div>
-<div class="app">🍎</div>
-</div
+<div class="app"><span class="lock">🔒</span>🍎<span class="idx">1</span></div>
+<div class="app"><span class="lock">🔒</span>🍎<span class="idx">2</span></div>
+<div class="app"><span class="lock">🔒</span>🍎<span class="idx">3</span></div>
+<div class="app"><span class="lock">🔒</span>🍎<span class="1000M">4</span></div>
+<div class="app"><span class="lock">🔒</span>🍎<span class="idx">5</span></div>
+<div class="app"><span class="lock">🔒</span>🍎<span class="idx">6</span></div>
+</div>
+
+<div class="albl">Touche une pomme pour avancer d'une étape</div>
+
+<div class="gain">
+<div class="g"><div class="v" id="pwin">1 200</div><div class="l">GAIN SI POMME BONNE</div></div>
+<div class="g"><div class="v" id="plvl">NIVEAU 1</div><div class="l">ÉTAPE</div></div>
+</div>
+</div>
+
+<div class="msg" id="msg">Choisis une pomme pour commencer 🍎</div>
+
+<div class="actions">
+<button class="btn red" id="bReset">🔄 RECOMMENCER</button>
+<button class="btn blue" id="bCash">💰 ENCAISSER</button>
+</div>
+
+<div class="stats-grid">
+<div class="stat-card"><div class="v" id="sTries">0</div><div class="l">Tentatives</div></div>
+<div class="stat-card"><div class="v" id="sWins">0</div><div class="l">Réussites</div></div>
+<div class="stat-card"><div class="v" id="sBest">N1</div><div class="l">Meilleur niveau</div></div>
+<div class="stat-card"><div class="v" id="sTotal">0</div><div class="l">Total gagné</div></div>
+</div>
+
+<div class="hist">
+<h3>🏆 Historique</h3>
+<div id="histList">
+<div class="r"><span class="a">🍎</span><span class="who">Manche précédente</span><span class="res w">N1</span></div>
+</div>
+</div>
+
+</div>
+
+<script>
+(function(){
+"use strict";
+
+/* ================================================================
+   CONFIG DU JEU — COMME LE VRAI 1xBet
+   ================================================================ */
+var ODDS  = [1.20, 1.45, 1.92, 2.50, 3.80, 5.55];  // cotes par niveau
+var N_LVL = ODDS.length;                            // 6 niveaux
+var MISE  = 1000;                                   // mise de base
+var BAL   = 10000;                                  // solde initial
+
+/* État du jeu */
+var lvl=0;          // 0 = pas commencé, 1-6 = niveau en cours
+var badApple=1+Math.floor(Math.random()*6); // pomme "casserole" cachée (1-6)
+var tries=0,wins=0,best=0,totalWon=0;
+var hist=[];
+var playing=false;
+
+var $=function(id){return document.getElementById(id);};
+
+/* ================================================================
+   INIT AFFICHAGE
+   ================================================================ */
+function updateDisplay(){
+ // Cote + gain
+ if(lvl>0){
+  var odd=ODDS[lvl-1];
+  $('odds').textContent='x'+odd.toFixed(2);
+  $('pwin').textContent=(MISE*odd).toLocaleString('fr-FR');
+  $('plvl').textContent='NIVEAU '+lvl;
+ }else{
+  $('odds').textContent='x1.20';
+  $('pwin').textContent='—';
+  $('plvl').textContent='PRÊT';
+ }
+
+ // Progression bar
+ $('lvl').textContent=lvl;
+ $('pfill').style.width=(lvl/N_LVL*100)+'%';
+
+ // Marques
+ for(var i=1;i<=N_LVL;i++){
+  var m=$('m'+i) || document.querySelector('.m'+i);
+  if(m){
+   m.classList.remove('done','current');
+   if(i<lvl){m.classList.add('done');}
+   else if(i===lvl){m.classList.add('current');}
+  }
+ }
+
+ // Solde
+ $('bal').textContent=BAL.toLocaleString('fr-FR');
+
+ // Stats
+ $('sTries').textContent=tries;
+ $('sWins').textContent=wins;
+ $('sBest').textContent='N'+best;
+ $('sTotal').textContent=totalWon.toLocaleString('fr-FR');
+ $('tries').textContent=tries;
+ $('wins').textContent=wins;
+
+ // Message selon état
+ if(lvl===0){
+  $('msg').textContent='Choisis une pomme pour commencer 🍎';
+  $('msg').className='msg';
+ }else if(lvl===N_LVL){
+  $('msg').textContent='🎉 NIVEAU MAX ATTEINT! Tu peux encaisser '+
+   (MISE*ODDS[N_LVL-1]).toLocaleString('fr-FR')+' ou continuer à jouer';
+  $('msg').className='msg w';
+ }
+}
+
+/* ================================================================
+   POMMES — GÉNÉRATION
+   ================================================================ */
+function resetApples(){
+ var apps=$('apples').children;
+ for(var i=0;i<apps.length;i++){
+  apps[i].className='app';
+  apps[i].innerHTML='<span class="lock">🔒</span>🍎<span class="idx">'+(i+1)+'</span>';
+ }
+}
+
+function enableApples(){
+ var apps=$('apples').children;
+ for(var i=0;i<apps.length;i++){
+  apps[i].classList.remove('disabled');
+ }
+}
+
+function disableApples(){
+ var apps=$('apples').children;
+ for(var i=0;i<apps.length;i++){
+  apps[i].classList.add('disabled');
+ }
+}
+
+/* ================================================================
+   NOUVELLE MANCHE
+   ================================================================ */
+function newRound(keepProgress){
+ if(!keepProgress){
+  lvl=0;
+  badApple=1+Math.floor(Math.random()*6);
+ }
+ resetApples();
+ enableApples();
+ playing=true;
+ if(!keepProgress){
+  $('msg').textContent='Nouvelle manche — choisis une pomme 🍎';
+  $('msg').className='msg';
+ }
+ updateDisplay();
+}
+
+/* ================================================================
+   CHOISIR UNE POMME
+   ================================================================ */
+$('apples').addEventListener('click',function(e){
+ var app=e.target.closest('.app');
+ if(!app||!playing)return;
+
+ var idx=1;
+ var apps=$('apples').children;
+ for(var i=0;i<apps.length;i++){
+  if(apps[i]===app){idx=i+1;break;}
+ }
+
+ if(lvl===0){
+  // Début de manche : prélève la mise
+  if(BAL<MISE){
+   $('msg').textContent='💰 Solde insuffisant — recharge ta mise';
+   $('msg').className='msg l';
+   return;
+  }
+  BAL-=MISE;
+ }
+
+ tries++;
+ disableApples();
+ app.classList.remove('lock');
+ app.innerHTML=app.innerHTML.replace('🔒','');
+
+ // Simulation du résultat (60% de chance de gagner à chaque étape)
+ var isWin=Math.random()<0.60;
+
+ setTimeout(function(){
+  if(isWin){
+   // GAGNÉ — avancer
+   lvl++;
+   if(lvl>best)best=lvl;
+   app.classList.add('hit');
+   app.innerHTML=app.innerHTML.replace('🍎','✅');
+
+   if(lvl>=N_LVL){
+    // NIVEAU MAX ATTEINT
+    var gain=MISE*ODDS[N_LVL-1];
+    BAL+=gain;
+    totalWon+=gain;
+    wins++;
+    playing=false;
+
+    $('msg').textContent='🎉🎉 BRAVO! NIVEAU MAX! Gain: '+gain.toLocaleString('fr-FR');
+    $('msg').className='msg w';
+    addHist('✅', 'Niveau max atteint', 'w', '+'+gain.toLocaleString('fr-FR'));
+
+    setTimeout(function(){
+     playing=false;
+     updateDisplay();
+    },1200);
+   }else{
+    // ÉTAPE RÉUSSIE — continuer
+    $('msg').textContent='✅ Pomme bonne! Étape '+lvl+'/'+N_LVL+' — continue ou encaisse';
+    $('msg').className='msg w';
+    addHist('✅','Étape '+lvl+'/'+N_LVL,'w','x'+ODDS[lvl-1].toFixed(2));
+
+    setTimeout(function(){
+     resetApples();
+     enableApples();
+     updateDisplay();
+    },1200);
+   }
+  }else{
+   // PERDU — tout recommencer
+   app.classList.add('boom');
+   app.innerHTML=app.innerHTML.replace('🍎','💥');
+
+   playing=false;
+   $('msg').textContent='💥 Pomme casserole! Tu perds la mise — recommence au niveau 1';
+   $('msg').className='msg l';
+   addHist('💥','Pomme casserole','l','-'+MISE.toLocaleString('fr-FR'));
+
+   setTimeout(function(){
+    lvl=0;
+    badApple=1+Math.floor(Math.random()*6);
+    resetApples();
+    enableApples();
+    playing=true;
+    updateDisplay();
+   },1800);
+  }
+
+  updateDisplay();
+ },700);
+});
+
+/* ================================================================
+   ENCAISSER
+   ================================================================ */
+$('bCash').addEventListener('click',function(){
+ if(lvl===0){
+  $('msg').textContent='Commence d\'abord une manche 🍎';
+  $('msg').className='msg';
+  return;
+ }
+
+ var gain=MISE*ODDS[lvl-1];
+ BAL+=gain;
+ totalWon+=gain;
+ wins++;
+ playing=false;
+
+ $('msg').textContent='💰 Encaissé! Tu gagnes '+gain.toLocaleString('fr-FR')+
+  ' (niveau '+lvl+'/'+N_LVL+')';
+ $('msg').className='msg w';
+ addHist('💰','Encaissé niveau '+lvl,'w','+'+gain.toLocaleString('fr-FR'));
+
+ setTimeout(function(){
+  lvl=0;
+  badApple=1+Math.floor(Math.random()*6);
+  resetApples();
+  enableApples();
+  playing=true;
+  updateDisplay();
+ },1600);
+});
+
+/* ================================================================
+   RECOMMENCER
+   ================================================================ */
+$('bReset').addEventListener('click',function(){
+ lvl=0;
+ badApple=1+Math.floor(Math.random()*6);
+ resetApples();
+ enableApples();
+ playing=true;
+ $('msg').textContent='🔄 Manche réinitialisée — nouvelle prédiction 🍎';
+ $('msg').className='msg';
+ updateDisplay();
+});
+
+/* ================================================================
+   HISTORIQUE
+   ================================================================ */
+function addHist(who,res,cls,amt){
+ hist.unshift({a:who,r:res,c:cls,amt:amt});
+ if(hist.length>8)hist.pop();
+ var html='';
+ for(var i=0;i<hist.length;i++){
+  var h=hist[i];
+  html+='<div class="r">'+
+   '<span class="a">'+h.a+'</span>'+
+   '<span class="who">'+h.r+'</span>'+
+   '<span class="res '+h.c+'">'+h.amt+'</span>'+
+   '</div>';
+ }
+ $('histList').innerHTML=html;
+}
+
+/* ================================================================
+   DÉMARRAGE
+   ================================================================ */
+newRound(false);
+addHist('🍎','Bienvenue! Prédiction simulée','w','—');
+
+})();
+</script>
+</body>
+</html>
