@@ -3,153 +3,190 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
-<title>Apple of Fortune - 10x5 Official</title>
+<title>Apple of Fortune - 1xBet Official Clone</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif}
-:root{--bg:#0a1120;--card:#121f36;--line:#1d3559;--green:#00e676;--gold:#ffd54f;--red:#ff3d6e;--blue:#009dff}
-body{background:var(--bg);color:#fff;display:flex;justify-content:center;padding:10px;min-height:100vh}
-.wrap{width:100%;max-width:420px}
-.header{display:flex;justify-content:space-between;align-items:center;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:10px}
-.header h1{font-size:14px;font-weight:900;letter-spacing:.5px}
-.header h1 span{color:var(--gold)}
-.bal{text-align:right}
-.bal small{font-size:9px;color:#6a84a8;display:block}
-.bal b{color:var(--gold);font-size:16px}
-.main{background:linear-gradient(180deg,#132040,#0d1529);border:1px solid var(--line);border-radius:16px;padding:14px}
-.odds-box{text-align:center;margin-bottom:10px}
-.odds-box .lbl{font-size:9px;letter-spacing:2px;color:#6a84a8}
-.odds-box .val{font-size:34px;font-weight:900;color:var(--gold);text-shadow:0 0 20px rgba(255,213,79,.4)}
-.info{text-align:center;font-size:12px;font-weight:700;min-height:18px;margin-bottom:10px;color:#8aa1c2}
-.info.win{color:var(--green)} .info.lose{color:var(--red)}
+:root{--bg:#0b1424;--card:#142038;--border:#1e3a5f;--green:#00e676;--gold:#ffd54f;--red:#ff4d6a;--blue:#009dff}
+body{background:var(--bg);color:#fff;min-height:100vh;display:flex;justify-content:center;padding:8px}
+.wrap{width:100%;max-width:480px;background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.topbar{background:#0e1a31;padding:12px 14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border)}
+.topbar h1{font-size:13px;font-weight:900}.topbar h1 span{color:var(--gold)}
+.bal{font-size:13px;font-weight:900;color:var(--gold)}.bal small{font-size:8px;color:#6b86a8;display:block;letter-spacing:1px}
 
-.ladder{display:flex;flex-direction:column-reverse;gap:6px}
-.lvl-row{display:flex;align-items:center;gap:8px;transition:all .3s}
-.lvl-row.locked{opacity:.3;pointer-events:none;filter:grayscale(.5)}
-.lvl-row.done{opacity:.6}
-.lvl-row.active .mult{background:var(--gold);color:#000;box-shadow:0 0 12px var(--gold)}
-.mult{min-width:56px;font-size:11px;font-weight:900;background:#0e1d36;border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center;color:#5d7da8}
-.cells{display:flex;gap:6px;flex:1}
-.cell{flex:1;aspect-ratio:1/0.9;background:linear-gradient(180deg,#1b2f54,#13233f);border:1px solid #25406d;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;position:relative;transition:.2s}
-.cell:hover{border-color:var(--blue);transform:translateY(-2px)}
-.cell.revealed-good{background:linear-gradient(180deg,#0f3d1f,#0a2a15);border-color:var(--green);box-shadow:0 0 18px rgba(0,230,118,.5)}
-.cell.revealed-bad{background:linear-gradient(180deg,#4a1525,#2a0e18);border-color:var(--red);box-shadow:0 0 18px rgba(255,61,110,.5);animation:shake .3s}
-.cell.blocked{opacity:.25;pointer-events:none}
-@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.controls-panel{padding:12px;background:#0e1a31;border-bottom:1px solid var(--border);display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.ctrl label{font-size:8px;color:#6b86a8;letter-spacing:1px;display:block;margin-bottom:4px}
+.ctrl input,.ctrl select{width:100%;background:#0a1426;border:1px solid var(--border);color:#fff;border-radius:8px;padding:8px 10px;font-size:13px;font-weight:700}
+.diff-btns{display:flex;gap:4px}
+.diff-btn{flex:1;padding:6px;font-size:11px;font-weight:800;border-radius:6px;border:1px solid var(--border);background:#0a1426;color:#6b86a8;cursor:pointer}
+.diff-btn.active{background:var(--gold);color:#000;border-color:var(--gold)}
 
-.controls{display:flex;gap:10px;margin-top:14px}
-.btn{flex:1;padding:14px;border-radius:12px;border:none;font-weight:900;font-size:13px;cursor:pointer}
+.main{padding:12px}
+.odds-main{text-align:center;margin-bottom:8px}
+.odds-main.l{font-size:8px;letter-spacing:2px;color:#6b86a8}
+.odds-main.v{font-size:32px;font-weight:900;color:var(--gold)}
+.status{text-align:center;font-size:11px;font-weight:700;min-height:16px;margin-bottom:8px;color:#8ca5c6}
+.status.win{color:var(--green)}.status.lose{color:var(--red)}
+
+.ladder{display:flex;flex-direction:column-reverse;gap:5px}
+.row{display:flex;align-items:center;gap:6px}
+.row.locked{opacity:.3;pointer-events:none}
+.row.done{opacity:.5}
+.row.active.coef{background:var(--gold);color:#000}
+.coef{min-width:52px;font-size:10px;font-weight:900;text-align:center;padding:5px 0;background:#0a1426;border:1px solid var(--border);border-radius:7px;color:#5a7aa0}
+.cells{display:flex;gap:5px;flex:1}
+.cell{flex:1;height:40px;background:linear-gradient(180deg,#1c335a,#13233f);border:1px solid #284a7a;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;transition:.15s}
+.cell:hover{border-color:var(--blue);transform:translateY(-1px)}
+.cell.good{background:linear-gradient(180deg,#0e3d20,#0a2d17);border-color:var(--green);box-shadow:0 0 12px rgba(0,230,118,.4)}
+.cell.bad{background:linear-gradient(180deg,#4a1930,#2e1020);border-color:var(--red);box-shadow:0 0 12px rgba(255,77,106,.4)}
+.cell.hide{opacity:.2;pointer-events:none}
+
+.action-bar{display:flex;gap:8px;margin-top:12px}
+.btn{flex:1;padding:13px;border-radius:11px;border:none;font-weight:900;font-size:13px;cursor:pointer}
+.btn-play{background:linear-gradient(135deg,#009dff,#0057ff);color:#fff}
 .btn-cash{background:linear-gradient(135deg,#00c853,var(--green));color:#00210a}
-.btn-reset{background:#1a2d4e;color:#8aa1c2;border:1px solid var(--line)}
 .btn:disabled{opacity:.35}
+.hist{margin-top:10px;background:#0a1426;border:1px solid var(--border);border-radius:10px;padding:8px;max-height:100px;overflow:auto}
+.hist div{font-size:10px;padding:3px 0;border-bottom:1px solid #0f1f3a;display:flex;justify-content:space-between}
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="header">
-    <h1>🍎 APPLE OF <span>FORTUNE</span><br><small style="font-size:9px;color:#4a658a;letter-spacing:2px">10x5 OFFICIAL</small></h1>
-    <div class="bal"><small>SOLDE</small><b id="balance">10 000</b></div>
+  <div class="topbar">
+    <h1>🍎 APPLE OF <span>FORTUNE</span> • 1XBET</h1>
+    <div class="bal"><small>SOLDE DEMO</small><span id="bal">10 000</span></div>
+  </div>
+  <div class="controls-panel">
+    <div class="ctrl"><label>MISE</label><input type="number" id="betInput" value="1000" min="100" step="100"></div>
+    <div class="ctrl"><label>DIFFICULTÉ (BOMBES)</label><div class="diff-btns">
+      <button class="diff-btn active" data-d="1">1</button>
+      <button class="diff-btn" data-d="2">2</button>
+      <button class="diff-btn" data-d="3">3</button>
+      <button class="diff-btn" data-d="4">4</button>
+    </div></div>
   </div>
   <div class="main">
-    <div class="odds-box"><div class="lbl">COTE ACTUELLE</div><div class="val" id="odds">x1.20</div></div>
-    <div class="info" id="status">Étage 1 - Choisis une pomme</div>
+    <div class="odds-main"><div class="l">COTE ACTUELLE</div><div class="v" id="odds">x1.20</div></div>
+    <div class="status" id="status">Choisis ta mise et lance</div>
     <div class="ladder" id="ladder"></div>
-    <div class="controls">
-      <button class="btn btn-reset" id="btnReset">🔄 RESET</button>
-      <button class="btn btn-cash" id="btnCash">ENCAISSER</button>
+    <div class="action-bar">
+      <button class="btn btn-play" id="btnPlay">▶ JOUER</button>
+      <button class="btn btn-cash" id="btnCash" disabled>ENCAISSER</button>
     </div>
+    <div class="hist" id="hist"></div>
   </div>
 </div>
-
 <script>
-const ODDS = [1.20, 1.44, 1.73, 2.08, 2.50, 3.00, 3.60, 4.32, 5.19, 6.23];
-const ROWS = 10, COLS = 5;
-let balance = 10000, bet = 1000, currentLevel = 0, traps = [], isPlaying = true;
+const ODDS_TABLE = {
+  1: [1.20,1.44,1.73,2.08,2.50,3.00,3.60,4.32,5.19,6.23],
+  2: [1.50,2.25,3.37,5.06,7.59,11.39,17.09,25.64,38.46,57.69],
+  3: [2.00,4.00,8.00,16.00,32.00,64.00,128.00,256.00,512.00,1024.00],
+  4: [5.00,25.00,125.00,625.00,3125.00,15625.00,78125.00,390625.00,1953125.00,9765625.00]
+};
+const ROWS=10, COLS=5;
+let balance=10000, currentBet=1000, difficulty=1, level=0, traps=[], playing=false;
 
-const ladder = document.getElementById('ladder');
-const balanceEl = document.getElementById('balance');
-const oddsEl = document.getElementById('odds');
-const statusEl = document.getElementById('status');
-const cashBtn = document.getElementById('btnCash');
+const balEl=document.getElementById('bal'), oddsEl=document.getElementById('odds'), statusEl=document.getElementById('status');
+const ladderEl=document.getElementById('ladder'), betInput=document.getElementById('betInput');
+const btnPlay=document.getElementById('btnPlay'), btnCash=document.getElementById('btnCash'), histEl=document.getElementById('hist');
 
-function buildGame(){
-  ladder.innerHTML=''; traps = Array.from({length:ROWS},()=>Math.floor(Math.random()*COLS));
-  currentLevel=0; isPlaying=true;
-  balance-=bet; if(balance<0) balance=10000;
+document.querySelectorAll('.diff-btn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.diff-btn').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); difficulty=parseInt(b.dataset.d); if(!playing) buildBoardPreview();
+});
+
+function buildBoardPreview(){
+  ladderEl.innerHTML='';
   for(let r=0;r<ROWS;r++){
-    const row=document.createElement('div');
-    row.className='lvl-row'+(r===0?' active':' locked');
-    row.dataset.r=r;
-    row.innerHTML=`<div class="mult">x${ODDS[r].toFixed(2)}</div><div class="cells"></div>`;
-    const cellsContainer=row.querySelector('.cells');
+    const row=document.createElement('div'); row.className='row locked'; row.dataset.r=r;
+    row.innerHTML=`<div class="coef">x${ODDS_TABLE[difficulty][r].toFixed(2)}</div><div class="cells"></div>`;
+    const cells=row.querySelector('.cells');
+    for(let c=0;c<COLS;c++){ const cell=document.createElement('div'); cell.className='cell'; cell.textContent='🍎'; cells.appendChild(cell); }
+    ladderEl.appendChild(row);
+  }
+  oddsEl.textContent='x'+ODDS_TABLE[difficulty][0].toFixed(2);
+}
+
+function startGame(){
+  currentBet=parseInt(betInput.value)||1000;
+  if(balance<currentBet){ statusEl.textContent='Solde insuffisant'; return; }
+  balance-=currentBet; traps=[];
+  for(let r=0;r<ROWS;r++){
+    let arr=[]; while(arr.length<difficulty){ let n=Math.floor(Math.random()*COLS); if(!arr.includes(n)) arr.push(n); }
+    traps.push(arr);
+  }
+  level=0; playing=true;
+  ladderEl.innerHTML='';
+  for(let r=0;r<ROWS;r++){
+    const row=document.createElement('div'); row.className='row'+(r===0?' active':' locked'); row.dataset.r=r;
+    row.innerHTML=`<div class="coef">x${ODDS_TABLE[difficulty][r].toFixed(2)}</div><div class="cells"></div>`;
+    const cells=row.querySelector('.cells');
     for(let c=0;c<COLS;c++){
-      const cell=document.createElement('div');
-      cell.className='cell'; cell.textContent='🍎'; cell.dataset.c=c;
-      cell.onclick=()=>clickCell(r,c,cell,row);
-      cellsContainer.appendChild(cell);
+      const cell=document.createElement('div'); cell.className='cell'; cell.dataset.c=c; cell.textContent='🍎';
+      cell.onclick=()=>pick(r,c,cell,row);
+      cells.appendChild(cell);
     }
-    ladder.appendChild(row);
+    ladderEl.appendChild(row);
   }
+  btnPlay.disabled=true; btnCash.disabled=true; btnCash.textContent='ENCAISSER';
+  statusEl.textContent=`Étage 1 - Évite ${difficulty} bombe(s)`; statusEl.className='status';
   updateUI();
-  statusEl.textContent='Étage 1 - Choisis une pomme'; statusEl.className='info';
 }
 
-function clickCell(r,c,cellEl,rowEl){
-  if(!isPlaying || r!==currentLevel) return;
-  const isTrap = c===traps[r];
-  cellEl.classList.add(isTrap?'revealed-bad':'revealed-good');
+function pick(r,c,cellEl,rowEl){
+  if(!playing || r!==level) return;
+  const isTrap=traps[r].includes(c);
+  cellEl.classList.add(isTrap?'bad':'good');
   cellEl.textContent=isTrap?'💥':'🍏';
-  rowEl.querySelectorAll('.cell').forEach(other=>{ if(other!==cellEl) other.classList.add('blocked'); });
-
+  rowEl.querySelectorAll('.cell').forEach(o=>{ if(o!==cellEl) o.classList.add('hide'); });
   if(isTrap){
-    statusEl.textContent=`💥 Perdu à l'étage ${r+1}!`; statusEl.className='info lose';
-    isPlaying=false; revealBombs(); cashBtn.disabled=true;
+    statusEl.textContent=`💥 BOOM Étage ${r+1}! Perdu ${currentBet}`; statusEl.className='status lose';
+    playing=false; btnPlay.disabled=false; btnCash.disabled=true; revealAll(); addHist(`Perdu Étage ${r+1}`,`-${currentBet}`,'lose');
   }else{
-    currentLevel++;
+    level++;
     rowEl.classList.remove('active'); rowEl.classList.add('done');
-    if(currentLevel>=ROWS){
-      const win=Math.floor(bet*ODDS[ROWS-1]); balance+=win;
-      statusEl.textContent=`🎉 JACKPOT! 10/10 étages! +${win.toLocaleString('fr-FR')}`; statusEl.className='info win';
-      isPlaying=false; cashBtn.textContent=`JACKPOT ${win}`; cashBtn.disabled=true;
+    if(level>=ROWS){
+      const win=Math.floor(currentBet*ODDS_TABLE[difficulty][ROWS-1]); balance+=win;
+      statusEl.textContent=`🎉 JACKPOT x${ODDS_TABLE[difficulty][ROWS-1]}! +${win.toLocaleString('fr-FR')}`; statusEl.className='status win';
+      playing=false; btnPlay.disabled=false; btnCash.disabled=true; addHist(`JACKPOT x${ODDS_TABLE[difficulty][ROWS-1]}`,`+${win}`,'win');
     }else{
-      const next=document.querySelector(`.lvl-row[data-r="${currentLevel}"]`);
-      next.classList.remove('locked'); next.classList.add('active');
-      statusEl.textContent=`✅ Étage ${r+1} OK! Va à l'étage ${currentLevel+1}`; statusEl.className='info win';
+      const next=document.querySelector(`.row[data-r="${level}"]`); next.classList.remove('locked'); next.classList.add('active');
+      statusEl.textContent=`✅ Étage ${r+1} validé - Étage ${level+1}`; statusEl.className='status win';
     }
   }
   updateUI();
 }
 
-function revealBombs(){
-  document.querySelectorAll('.lvl-row').forEach((row,ri)=>{
+function revealAll(){
+  document.querySelectorAll('.row').forEach((row,ri)=>{
     row.classList.remove('locked','active');
     row.querySelectorAll('.cell').forEach((cell,ci)=>{
-      if(ci===traps[ri] && !cell.classList.contains('revealed-bad') && !cell.classList.contains('revealed-good')){
-        cell.textContent='💣'; cell.style.opacity='.5';
-      }
+      if(traps[ri].includes(ci) &&!cell.classList.contains('bad') &&!cell.classList.contains('good')){ cell.textContent='💣'; cell.style.opacity='.4'; }
     });
   });
 }
 
 function updateUI(){
-  balanceEl.textContent=balance.toLocaleString('fr-FR');
-  if(currentLevel>0){
-    const gain=Math.floor(bet*ODDS[currentLevel-1]);
-    oddsEl.textContent='x'+ODDS[currentLevel-1].toFixed(2);
-    cashBtn.textContent=`ENCAISSER ${gain.toLocaleString('fr-FR')}`; cashBtn.disabled=!isPlaying;
-  }else{
-    oddsEl.textContent='x1.20'; cashBtn.textContent='ENCAISSER'; cashBtn.disabled=true;
-  }
+  balEl.textContent=balance.toLocaleString('fr-FR');
+  if(level>0 && playing){
+    const gain=Math.floor(currentBet*ODDS_TABLE[difficulty][level-1]);
+    oddsEl.textContent='x'+ODDS_TABLE[difficulty][level-1].toFixed(2);
+    btnCash.textContent=`ENCAISSER ${gain.toLocaleString('fr-FR')}`; btnCash.disabled=false;
+  }else if(level===0 && playing){ btnCash.disabled=true; }
 }
 
-cashBtn.onclick=()=>{
-  if(!isPlaying || currentLevel===0) return;
-  const gain=Math.floor(bet*ODDS[currentLevel-1]); balance+=gain;
-  statusEl.textContent=`💰 Encaissé étage ${currentLevel}: +${gain.toLocaleString('fr-FR')}`; statusEl.className='info win';
-  isPlaying=false; revealBombs(); updateUI(); cashBtn.textContent='ENCAISSÉ'; cashBtn.disabled=true;
+btnPlay.onclick=startGame;
+btnCash.onclick=()=>{
+  if(!playing || level===0) return;
+  const gain=Math.floor(currentBet*ODDS_TABLE[difficulty][level-1]); balance+=gain;
+  statusEl.textContent=`💰 Encaissé x${ODDS_TABLE[difficulty][level-1]}: +${gain.toLocaleString('fr-FR')}`; statusEl.className='status win';
+  playing=false; btnPlay.disabled=false; btnCash.disabled=true; revealAll(); updateUI();
+  addHist(`Encaissé Étage ${level} x${ODDS_TABLE[difficulty][level-1]}`,`+${gain}`,'win');
 };
-
-document.getElementById('btnReset').onclick=buildGame;
-buildGame();
+function addHist(txt,amt,type){
+  const d=document.createElement('div'); d.innerHTML=`<span>${txt}</span><b style="color:${type==='win'?'#00e676':'#ff4d6a'}">${amt}</b>`;
+  histEl.prepend(d);
+}
+buildBoardPreview();
 </script>
 </body>
 </html>
